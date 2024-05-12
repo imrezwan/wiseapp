@@ -13,4 +13,10 @@
 
     <color name="start_background">#8DD3F3</color>
     <color name="stop_background">#ADB0B1</color>
+
+
+    <color name="colorLightLimeGreen">#DDE4D2</color>
+    <color name="colorLimeGreen">#59C1A7</color>
+    <color name="colorLightBlue">#73AED0</color>
+    <color name="colorDarkBlue">#4040FF</color>
 </resources>
