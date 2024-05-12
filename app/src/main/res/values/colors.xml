@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#d84315</color>
+    <color name="colorPrimaryDark">#bf360c</color>
+    <color name="colorAccent">#ff6e40</color>
+
+    <color name="colorRecieveText">#00FF00</color>
+    <color name="colorSendText">#82CAFF</color>
+    <color name="colorStatusText">#FFDB58</color>
+
+    <color name="backgroundColor">#D5F1F4</color>
+    <color name="textColor">#343737</color>
+
+    <color name="start_background">#8DD3F3</color>
+    <color name="stop_background">#ADB0B1</color>
+</resources>

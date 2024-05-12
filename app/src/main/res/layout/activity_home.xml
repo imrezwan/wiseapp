@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/backgroundColor"
+    android:orientation="vertical"
+    tools:context=".HomeActivity">
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            app:title="CoffeePro"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1.5"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Ready"
+                android:textSize="14dp"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:textColor="#0A9521"
+                android:layout_marginTop="30dp"
+                android:layout_height="wrap_content">
+            </TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="92° C"
+                android:textSize="14dp"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:textColor="#213925"
+                android:layout_marginBottom="20dp"
+                android:layout_height="wrap_content">
+            </TextView>
+
+            <TextView
+                android:layout_width="25dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:background="@color/colorAccent"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="30dp"
+                android:layout_height="match_parent">
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_weight="9"
+            android:weightSum="10"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_weight="5"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_marginBottom="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    app:cardCornerRadius="15sp"
+                    android:backgroundTint="#5AB1F6"
+                    android:layout_gravity="center"
+                    app:cardElevation="10dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Profiling"
+                        android:gravity="center"
+                        android:textSize="20sp"
+                        android:textColor="#343535"
+                        android:background="@drawable/button_border_enable"
+                        android:layout_gravity="center"
+                        android:textAllCaps="true"
+                        android:textStyle="bold"
+                        ></TextView>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    app:cardCornerRadius="15sp"
+                    android:backgroundTint="#5AB1F6"
+                    android:layout_gravity="center"
+                    app:cardElevation="10dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/button_border_enable"
+                        android:text="Flush"
+                        android:gravity="center"
+                        android:textSize="20sp"
+                        android:textColor="#343535"
+                        android:layout_gravity="center"
+                        android:textAllCaps="true"
+                        android:textStyle="bold"
+                        ></TextView>
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_weight="5"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    app:cardCornerRadius="15sp"
+                    android:backgroundTint="#5AB1F6"
+                    android:layout_gravity="center"
+                    app:cardElevation="10dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Start"
+                        android:gravity="center"
+                        android:textSize="20sp"
+                        android:textColor="#343535"
+                        android:background="@drawable/button_border_enable"
+                        android:layout_gravity="center"
+                        android:textAllCaps="true"
+                        android:textStyle="bold"
+                        android:padding="30dp"
+                        ></TextView>
+                </androidx.cardview.widget.CardView>
+
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
