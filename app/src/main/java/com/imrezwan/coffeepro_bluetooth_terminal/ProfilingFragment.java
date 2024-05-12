@@ -2,6 +2,7 @@ package com.imrezwan.coffeepro_bluetooth_terminal;
 
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -11,7 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class ProfilingFragment extends Fragment {
-    private TextView tvDefault, tvProfile1, tvProfile2, tvProfile3;
+    private TextView tvDefault, tvProfile1, tvProfile2, tvProfile3, tvProfile4;
+    private CardView mNewProfile;
     private HomeFragment receiverFragment ;
 
     public ProfilingFragment(HomeFragment receiverFragment) {
@@ -51,6 +53,14 @@ public class ProfilingFragment extends Fragment {
         tvProfile3.setOnClickListener(view -> {
             sendProfileName("profile3");
         });
+
+        tvProfile4.setOnClickListener(view -> {
+            sendProfileName("profile4");
+        });
+
+        mNewProfile.setOnClickListener(view -> {
+
+        });
     }
 
     private void sendProfileName(String name) {
@@ -69,6 +79,8 @@ public class ProfilingFragment extends Fragment {
         tvProfile1 = view.findViewById(R.id.tv_profile1);
         tvProfile2 = view.findViewById(R.id.tv_profile2);
         tvProfile3 = view.findViewById(R.id.tv_profile3);
+        tvProfile4 = view.findViewById(R.id.tv_profile4);
+        mNewProfile = view.findViewById(R.id.card_new_profile);
     }
 
 
