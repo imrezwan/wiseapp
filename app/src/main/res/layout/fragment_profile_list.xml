@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_margin="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    android:name="com.imrezwan.wise_brewer.ProfilesFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Profile List"
+        android:textStyle="bold"
+        android:textColor="@color/colorWhite"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="32sp"
+        android:padding="12dp"
+        android:background="@drawable/title_bg"
+        android:layout_marginBottom="15dp"
+        />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_profile_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="LinearLayoutManager"
+        android:background="@color/colorWhite"
+        tools:context=".ProfilesFragment"
+        tools:listitem="@layout/fragment_profiles" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?attr/selectableItemBackground"
+        android:layout_marginBottom="50dp"
+        android:clickable="true"
+        app:cardCornerRadius="10dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@drawable/button_bg"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="40sp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/add_circle_icon" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New profile"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:textSize="25sp"
+                android:textColor="@color/colorWhite"></TextView>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

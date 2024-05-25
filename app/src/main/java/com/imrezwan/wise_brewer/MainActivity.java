@@ -34,10 +34,10 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.nav_home:
-                    getSupportFragmentManager().beginTransaction().add(R.id.fragment, new HomeFragment2(), "home").commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new HomeFragment2(), "home").addToBackStack(null).commit();
                     return true;
                 case R.id.nav_profiles:
-                    getSupportFragmentManager().beginTransaction().add(R.id.fragment, new HomeFragment2(), "profiles").commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new ProfilesFragment(), "profiles").addToBackStack(null).commit();
                     return true;
             }
             return false;
