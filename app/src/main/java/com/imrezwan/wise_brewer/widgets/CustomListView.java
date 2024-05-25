@@ -12,6 +12,7 @@ import com.imrezwan.wise_brewer.adapters.CustomListAdapter;
 import java.util.List;
 
 public class CustomListView extends ListView {
+    CustomListAdapter adapter;
 
     public CustomListView(Context context) {
         super(context);
@@ -43,8 +44,16 @@ public class CustomListView extends ListView {
 
     // Method to set data to the ListView using a custom adapter
     public void setData(List<String> dataList) {
-        CustomListAdapter adapter = new CustomListAdapter(getContext(), dataList);
+        adapter = new CustomListAdapter(getContext(), dataList);
         setAdapter(adapter);
+    }
+
+    public String getSelectedItemData() {
+        return adapter.getSelectedItem();
+    }
+
+    public CustomListAdapter getAdapter() {
+        return adapter;
     }
 }
 

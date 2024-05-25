@@ -48,19 +48,15 @@ public class CustomListAdapter extends ArrayAdapter<String> {
             holder.textView.setTextColor(ContextCompat.getColor(mContext, R.color.colorBlack));
         }
 
-        // Handle item click
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectedPosition = position; // Update selected position
-                notifyDataSetChanged(); // Refresh the ListView to apply the changes
-            }
+        convertView.setOnClickListener(v -> {
+            selectedPosition = position;
+            notifyDataSetChanged();
         });
 
         return convertView;
     }
 
-    private String getSelectedItem() {
+    public String getSelectedItem() {
         return mDataList.get(selectedPosition);
     }
 
