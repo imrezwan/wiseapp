@@ -12,10 +12,11 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
         getSupportFragmentManager().addOnBackStackChangedListener(this);
         if (savedInstanceState == null)
-            getSupportFragmentManager().beginTransaction().add(R.id.fragment, new HomeFragment(), "home").commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment, new HomeFragment2(), "home").commit();
         else
             onBackStackChanged();
     }

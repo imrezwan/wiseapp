@@ -30,9 +30,6 @@ public class HomeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id){
-            case R.id.item1:
-                gotoMainActivity();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

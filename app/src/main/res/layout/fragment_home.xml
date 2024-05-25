@@ -35,15 +35,6 @@
                 android:text="Connecting..."
                 android:textColor="@color/textColor"></TextView>
         </LinearLayout>
-        <!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="match_parent"-->
-        <!--            android:background="#D5F1F4"-->
-        <!--            android:orientation="vertical">-->
-        <!--            -->
-
-
-        <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
         <LinearLayout
             android:id="@+id/ll_status_water"

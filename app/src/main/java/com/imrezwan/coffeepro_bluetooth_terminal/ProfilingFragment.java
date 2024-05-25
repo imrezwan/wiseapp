@@ -59,7 +59,13 @@ public class ProfilingFragment extends Fragment {
         });
 
         mNewProfile.setOnClickListener(view -> {
-
+            getParentFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment,
+                            new ProfileRecipeFragment(),
+                            "profile_recipe")
+                    .addToBackStack(null)
+                    .commit();
         });
     }
 
