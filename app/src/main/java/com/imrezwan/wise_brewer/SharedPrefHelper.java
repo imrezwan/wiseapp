@@ -1,4 +1,4 @@
-package com.imrezwan.coffeepro_bluetooth_terminal;
+package com.imrezwan.wise_brewer;
 
 import static android.content.Context.MODE_PRIVATE;
 import android.content.Context;

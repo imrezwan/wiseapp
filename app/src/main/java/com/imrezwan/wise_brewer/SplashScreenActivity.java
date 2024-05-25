@@ -1,4 +1,4 @@
-package com.imrezwan.coffeepro_bluetooth_terminal;
+package com.imrezwan.wise_brewer;
 
 import androidx.appcompat.app.AppCompatActivity;
 

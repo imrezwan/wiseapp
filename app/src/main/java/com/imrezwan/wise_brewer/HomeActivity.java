@@ -1,4 +1,4 @@
-package com.imrezwan.coffeepro_bluetooth_terminal;
+package com.imrezwan.wise_brewer;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 public class HomeActivity extends AppCompatActivity {
 

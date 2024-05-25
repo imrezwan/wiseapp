@@ -1,4 +1,4 @@
-package com.imrezwan.coffeepro_bluetooth_terminal;
+package com.imrezwan.wise_brewer;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Color;
-import android.graphics.Path;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -24,7 +23,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,8 +31,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-
-import com.biansemao.widget.ThermometerView;
 
 import java.util.ArrayDeque;
 import java.util.concurrent.TimeUnit;
