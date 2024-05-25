@@ -10,19 +10,12 @@
     android:background="@color/colorWhite"
     android:name="com.imrezwan.wise_brewer.ProfilesFragment">
 
-    <TextView
+    <com.imrezwan.wise_brewer.widgets.TitleView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Profile List"
-        android:textStyle="bold"
-        android:textColor="@color/colorWhite"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:textSize="32sp"
-        android:padding="12dp"
-        android:background="@drawable/title_bg"
-        android:layout_marginBottom="15dp"
+        app:title="Profile List"
         />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_profile_list"
         android:layout_width="match_parent"
@@ -33,6 +26,7 @@
         tools:listitem="@layout/fragment_profiles" />
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/card_new_profile_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foreground="?attr/selectableItemBackground"

@@ -3,6 +3,7 @@ package com.imrezwan.wise_brewer;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -53,6 +54,13 @@ public class ProfilesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile_list, container, false);
+        CardView mNewProfileBtn = view.findViewById(R.id.card_new_profile_btn);
+        mNewProfileBtn.setOnClickListener(view1 -> getActivity()
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment, new ProfileSetupFragment(), "profilesetup")
+                .addToBackStack(null)
+                .commit());
 
         RecyclerView rvProfileList = view.findViewById(R.id.rv_profile_list);
         if (rvProfileList instanceof RecyclerView) {
