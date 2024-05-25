@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         setupBottomNavigationBar();
         getSupportFragmentManager().addOnBackStackChangedListener(this);
         if (savedInstanceState == null)
-            getSupportFragmentManager().beginTransaction().add(R.id.fragment, new HomeFragment2(), "home").commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new HomeFragment2(), "home").commit();
         else
             onBackStackChanged();
     }
