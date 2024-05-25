@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="customBackground" format="reference" />
+
     <declare-styleable name="TitleView">
         <attr name="title" format="string" />
     </declare-styleable>
 
     <declare-styleable name="CustomListView">
-        <attr name="customBackground" format="reference" />
+        <attr name="customBackground"/>
+    </declare-styleable>
+
+    <declare-styleable name="CustomRecyclerView">
+        <attr name="customBackground"/>
     </declare-styleable>
 </resources>

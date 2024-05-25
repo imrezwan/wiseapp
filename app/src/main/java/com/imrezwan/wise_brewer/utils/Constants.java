@@ -6,6 +6,6 @@ import java.util.List;
 
 public class Constants {
 
-    public static List<String> mDataAmountOfWater = Arrays.asList("20", "30", "40", "50", "60", "70");
-    public static List<String> mDataTemperature = Arrays.asList("88c", "89c", "90c", "92c", "93c", "94c");
+    public static List<String> mDataAmountOfWater = Arrays.asList("200", "250", "300", "350", "400", "450", "500");
+    public static List<String> mDataTemperature = Arrays.asList("88c", "89c", "90c", "92c", "93c", "94c", "95c", "96c");
 }

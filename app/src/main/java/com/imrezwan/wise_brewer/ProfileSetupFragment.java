@@ -4,16 +4,20 @@ import static com.imrezwan.wise_brewer.utils.Constants.mDataAmountOfWater;
 import static com.imrezwan.wise_brewer.utils.Constants.mDataTemperature;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 
-import com.imrezwan.wise_brewer.widgets.CustomListView;
+import com.imrezwan.wise_brewer.interfaces.OnItemClickListener;
+import com.imrezwan.wise_brewer.widgets.CustomRecyclerView;
 
 public class ProfileSetupFragment extends Fragment {
-    CustomListView mAmountOfWater, mTemperature;
+    CustomRecyclerView mCrvAmountOfWater, mCrvTemperature;
+    NestedScrollView nestedScrollView;
 
     public ProfileSetupFragment() {
     }
@@ -33,14 +37,27 @@ public class ProfileSetupFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile_setup, container, false);
         initialize(view);
+
+        nestedScrollView.setNestedScrollingEnabled(true);
         return view;
     }
 
     private void initialize(View view) {
-        mAmountOfWater = view.findViewById(R.id.clv_amount_of_water);
-        mTemperature = view.findViewById(R.id.clv_temperature);
+        mCrvAmountOfWater = view.findViewById(R.id.crv_amount_of_water);
+        mCrvTemperature = view.findViewById(R.id.crv_temperature);
+        nestedScrollView = view.findViewById(R.id.nested_scrollview);
 
-        mAmountOfWater.setData(mDataAmountOfWater);
-        mTemperature.setData(mDataTemperature);
+        mCrvAmountOfWater.setData(mDataAmountOfWater, new OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Log.d("TAGGG", "Water: " + mCrvAmountOfWater.getSelectedItemData() + " -> Clicked");
+            }
+        });
+        mCrvTemperature.setData(mDataTemperature, new OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Log.d("TAGGG", "Temp: " + mCrvTemperature.getSelectedItemData() + " -> Clicked");
+            }
+        });
     }
 }
