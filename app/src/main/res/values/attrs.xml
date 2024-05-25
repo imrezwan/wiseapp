@@ -3,4 +3,8 @@
     <declare-styleable name="TitleView">
         <attr name="title" format="string" />
     </declare-styleable>
+
+    <declare-styleable name="CustomListView">
+        <attr name="customBackground" format="reference" />
+    </declare-styleable>
 </resources>
