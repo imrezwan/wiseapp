@@ -13,4 +13,7 @@
     <declare-styleable name="CustomRecyclerView">
         <attr name="customBackground"/>
     </declare-styleable>
+    <declare-styleable name="SubtitleView">
+        <attr name="subtitle" format="string" />
+    </declare-styleable>
 </resources>

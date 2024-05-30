@@ -5,34 +5,27 @@ import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.imrezwan.wise_brewer.models.ProfileFactory;
+import com.imrezwan.wise_brewer.utils.FragmentHandler;
+import com.imrezwan.wise_brewer.view_models.ProfileCreationViewModel;
 
-/**
- * A fragment representing a list of Items.
- */
 public class ProfilesFragment extends Fragment {
-
-    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 1;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public ProfilesFragment() {
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
     public static ProfilesFragment newInstance(int columnCount) {
         ProfilesFragment fragment = new ProfilesFragment();
         Bundle args = new Bundle();
@@ -55,12 +48,9 @@ public class ProfilesFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile_list, container, false);
         CardView mNewProfileBtn = view.findViewById(R.id.card_new_profile_btn);
-        mNewProfileBtn.setOnClickListener(view1 -> getActivity()
-                .getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment, new ProfileSetupFragment(), "profilesetup")
-                .addToBackStack(null)
-                .commit());
+        mNewProfileBtn.setOnClickListener(view1 ->
+                FragmentHandler.replaceFragment(getActivity(), new ProfileSetupFragment(), "profilesetup")
+        );
 
         RecyclerView rvProfileList = view.findViewById(R.id.rv_profile_list);
         if (rvProfileList instanceof RecyclerView) {

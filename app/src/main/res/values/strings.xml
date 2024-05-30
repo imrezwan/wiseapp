@@ -8,4 +8,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="splash_quote">\'Everytime I Brew...\nBrew for YOU...\'</string>
+    <string name="pause_sec">Pause (sec)</string>
+    <string name="speed_ml_s">Speed (mL/s)</string>
+    <string name="water_ml">Water (mL)</string>
 </resources>

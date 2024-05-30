@@ -8,16 +8,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.imrezwan.wise_brewer.fragments.BloomingFragment;
 import com.imrezwan.wise_brewer.interfaces.OnItemClickListener;
+import com.imrezwan.wise_brewer.utils.FragmentHandler;
+import com.imrezwan.wise_brewer.view_models.ProfileCreationViewModel;
 import com.imrezwan.wise_brewer.widgets.CustomRecyclerView;
 
 public class ProfileSetupFragment extends Fragment {
     CustomRecyclerView mCrvAmountOfWater, mCrvTemperature;
     NestedScrollView nestedScrollView;
+    TextView mNext;
 
     public ProfileSetupFragment() {
     }
@@ -39,6 +46,10 @@ public class ProfileSetupFragment extends Fragment {
         initialize(view);
 
         nestedScrollView.setNestedScrollingEnabled(true);
+
+        mNext.setOnClickListener(view1 ->
+            FragmentHandler.replaceFragment(getActivity(), new BloomingFragment(), "blooming")
+        );
         return view;
     }
 
@@ -46,6 +57,7 @@ public class ProfileSetupFragment extends Fragment {
         mCrvAmountOfWater = view.findViewById(R.id.crv_amount_of_water);
         mCrvTemperature = view.findViewById(R.id.crv_temperature);
         nestedScrollView = view.findViewById(R.id.nested_scrollview);
+        mNext = view.findViewById(R.id.tv_next);
 
         mCrvAmountOfWater.setData(mDataAmountOfWater, new OnItemClickListener() {
             @Override

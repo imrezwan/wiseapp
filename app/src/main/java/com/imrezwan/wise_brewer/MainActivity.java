@@ -7,9 +7,12 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.imrezwan.wise_brewer.utils.FragmentHandler;
+import com.imrezwan.wise_brewer.view_models.ProfileCreationViewModel;
 
 public class MainActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener {
 
@@ -25,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         setupBottomNavigationBar();
         getSupportFragmentManager().addOnBackStackChangedListener(this);
         if (savedInstanceState == null)
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new HomeFragment2(), "home").commit();
+            FragmentHandler.replaceFragment(this, HomeFragment2.newInstance(), "home");
         else
             onBackStackChanged();
     }

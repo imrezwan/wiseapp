@@ -3,26 +3,22 @@ package com.imrezwan.wise_brewer;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.imrezwan.wise_brewer.view_models.ProfileCreationViewModel;
+
 public class HomeFragment2 extends Fragment {
+    private ProfileCreationViewModel viewModel;
 
     public HomeFragment2() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment2.
-     */
-    // TODO: Rename and change types and number of parameters
     public static HomeFragment2 newInstance(String param1, String param2) {
         HomeFragment2 fragment = new HomeFragment2();
         return fragment;

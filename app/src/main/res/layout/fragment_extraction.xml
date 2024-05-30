@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_margin="10dp"
+    tools:context=".ProfileSetupFragment">
+
+    <com.imrezwan.wise_brewer.widgets.TitleView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="Profile Setup"
+        />
+
+    <com.imrezwan.wise_brewer.widgets.SubtitleView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="15dp"
+        android:id="@+id/subtitle"
+        />
+
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:padding="10dp"
+                android:background="@color/colorBackground">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/water_ml"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textSize="20sp"/>
+
+                <com.imrezwan.wise_brewer.widgets.CustomRecyclerView
+                    android:id="@+id/crv_extraction_water"
+                    android:layout_width="250dp"
+                    android:layout_height="140dp"
+                    android:layout_gravity="center"
+                    android:padding="5dp"
+                    android:background="@drawable/block_white_bg_with_border"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:padding="10dp"
+                android:background="@color/colorBackground">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/speed_ml_s"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textSize="20sp"/>
+
+                <com.imrezwan.wise_brewer.widgets.CustomRecyclerView
+                    android:id="@+id/crv_extraction_speed"
+                    android:layout_width="250dp"
+                    android:layout_height="140dp"
+                    android:layout_gravity="center"
+                    android:padding="5dp"
+                    android:background="@drawable/block_white_bg_with_border"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:padding="10dp"
+                android:background="@color/colorBackground">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pause_sec"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textSize="20sp"/>
+
+                <com.imrezwan.wise_brewer.widgets.CustomRecyclerView
+                    android:id="@+id/crv_extraction_pause"
+                    android:layout_width="250dp"
+                    android:layout_height="140dp"
+                    android:layout_gravity="center"
+                    android:padding="5dp"
+                    android:background="@drawable/block_white_bg_with_border"
+                    />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="50dp"
+                android:padding="10dp"
+                android:background="@color/colorBackground">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="10dp"
+                    android:clickable="true"
+                    app:cardCornerRadius="10dp">
+                    <TextView
+                        android:id="@+id/tv_back"
+                        android:layout_weight="1"
+                        android:layout_width="100dp"
+                        android:layout_height="50dp"
+                        android:text="Back"
+                        android:drawableLeft="@drawable/arrow_circle_left"
+                        android:background="@drawable/button_bg"
+                        app:layout_constraintCircleRadius="10dp"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:textAllCaps="true"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toLeftOf="@id/tv_next"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold"
+                        android:textSize="20sp"/>
+                </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:clickable="true"
+                    app:cardCornerRadius="10dp">
+                    <TextView
+                        android:id="@+id/tv_next"
+                        android:layout_width="100dp"
+                        android:layout_height="50dp"
+                        android:text="Next"
+                        android:textAllCaps="true"
+                        android:layout_weight="1"
+                        android:drawableRight="@drawable/arrow_circle_right"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintLeft_toRightOf="@+id/tv_back"
+                        android:background="@drawable/button_bg"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold"
+                        android:textSize="20sp"/>
+                </androidx.cardview.widget.CardView>
+            </RelativeLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>
