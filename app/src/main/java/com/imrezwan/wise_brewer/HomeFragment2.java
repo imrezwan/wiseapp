@@ -14,12 +14,11 @@ import android.view.ViewGroup;
 import com.imrezwan.wise_brewer.view_models.ProfileCreationViewModel;
 
 public class HomeFragment2 extends Fragment {
-    private ProfileCreationViewModel viewModel;
 
     public HomeFragment2() {
     }
 
-    public static HomeFragment2 newInstance(String param1, String param2) {
+    public static HomeFragment2 newInstance() {
         HomeFragment2 fragment = new HomeFragment2();
         return fragment;
     }
