@@ -2,6 +2,7 @@ package com.imrezwan.wise_brewer;
 
 class Constants {
 
+    public static final String DEVICE_ADDRESS_KEY = "deviceAddress";
     // values have to be globally unique
     static final String INTENT_ACTION_DISCONNECT = BuildConfig.APPLICATION_ID + ".Disconnect";
     static final String NOTIFICATION_CHANNEL = BuildConfig.APPLICATION_ID + ".Channel";

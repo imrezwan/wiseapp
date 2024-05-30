@@ -1,5 +1,6 @@
 package com.imrezwan.wise_brewer;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -139,6 +140,7 @@ public class SerialService extends Service implements SerialListener {
         listener = null;
     }
 
+    @SuppressLint("ForegroundServiceType")
     private void createNotification() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel nc = new NotificationChannel(Constants.NOTIFICATION_CHANNEL, "Background service", NotificationManager.IMPORTANCE_LOW);

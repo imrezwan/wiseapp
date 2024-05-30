@@ -1,17 +1,11 @@
 package com.imrezwan.wise_brewer;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.imrezwan.wise_brewer.view_models.ProfileCreationViewModel;
+import androidx.fragment.app.Fragment;
 
 public class HomeFragment2 extends Fragment {
 

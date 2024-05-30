@@ -140,7 +140,7 @@ public class DevicesFragment extends ListFragment {
         BluetoothDevice device = listItems.get(position-1);
         Bundle args = new Bundle();
         args.putString("device", device.getAddress());
-        Fragment fragment = new HomeFragment();
+        Fragment fragment = new HomeFragment2();
         fragment.setArguments(args);
         sharedPrefHelper.setString("deviceAddress", device.getAddress());
         getParentFragmentManager().beginTransaction().replace(R.id.fragment, fragment, "home").addToBackStack(null).commit();

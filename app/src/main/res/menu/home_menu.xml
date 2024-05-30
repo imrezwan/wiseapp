@@ -5,11 +5,11 @@
         android:title="Bluetooth Connect"
         app:showAsAction="always"
         android:iconTint="@color/colorBlack"
-        android:icon="@android:drawable/stat_sys_data_bluetooth"/>
+        android:icon="@drawable/bluetooth"/>
 
     <item  android:id="@+id/bluetooth_search"
         android:title="Bluetooth Search"
         app:showAsAction="always"
         android:iconTint="@color/colorBlack"
-        android:icon="@android:drawable/ic_menu_search"/>
+        android:icon="@drawable/search"/>
 </menu>
