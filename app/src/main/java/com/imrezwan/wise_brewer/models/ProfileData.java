@@ -1,37 +1,37 @@
 package com.imrezwan.wise_brewer.models;
 
 public class ProfileData {
-    private int baseTemperature = -1;
-    private int baseAmountOfWater = -1;
+    private int baseTemperature = 0;
+    private int baseAmountOfWater = 0;
 
     private boolean bloomFlag = false;
-    private int bloomWater = -1;
-    private int bloomSpeed = -1;
-    private int bloomPause = -1;
+    private int bloomWater = 0;
+    private int bloomSpeed = 0;
+    private int bloomPause = 0;
 
-    private int extraction1Water = -1;
-    private int extraction1Speed = -1;
-    private int extraction1Pause = -1;
+    private int extraction1Water = 0;
+    private int extraction1Speed = 0;
+    private int extraction1Pause = 0;
 
     private boolean extraction2Flag = false;
-    private int extraction2Water = -1;
-    private int extraction2Speed = -1;
-    private int extraction2Pause = -1;
+    private int extraction2Water = 0;
+    private int extraction2Speed = 0;
+    private int extraction2Pause = 0;
 
     private boolean extraction3Flag = false;
-    private int extraction3Water = -1;
-    private int extraction3Speed = -1;
-    private int extraction3Pause = -1;
+    private int extraction3Water = 0;
+    private int extraction3Speed = 0;
+    private int extraction3Pause = 0;
 
     private boolean extraction4Flag = false;
-    private int extraction4Water = -1;
-    private int extraction4Speed = -1;
-    private int extraction4Pause = -1;
+    private int extraction4Water = 0;
+    private int extraction4Speed = 0;
+    private int extraction4Pause = 0;
 
     private boolean extraction5Flag = false;
-    private int extraction5Water = -1;
-    private int extraction5Speed = -1;
-    private int extraction5Pause = -1;
+    private int extraction5Water = 0;
+    private int extraction5Speed = 0;
+    private int extraction5Pause = 0;
 
     public ProfileData() {
     }
