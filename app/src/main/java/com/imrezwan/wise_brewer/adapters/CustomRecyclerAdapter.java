@@ -76,7 +76,7 @@ public class CustomRecyclerAdapter extends RecyclerView.Adapter<CustomRecyclerAd
 
     public void setSelectedItem(String item) {
         int position = dataList.indexOf(item);
-        updateSelectedItem(position);
+        updateSelectedItem(position != -1 ? position : 0);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
