@@ -1,41 +1,89 @@
 package com.imrezwan.wise_brewer.models;
 
+import android.content.Context;
+import android.util.Log;
+
+import com.imrezwan.wise_brewer.SharedPrefHelper;
+import com.imrezwan.wise_brewer.utils.Constants;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ProfileFactory {
-    public static final List<Profile> ITEMS = new ArrayList<Profile>();
-    public static final Map<String, Profile> ITEM_MAP = new HashMap<String, Profile>();
+    private SharedPrefHelper sharedPrefHelper;
 
-    static {
-        addItem(new Profile("1", "Default", ""));
-        addItem(new Profile("2", "Profile 1", ""));
-        addItem(new Profile("3", "Profile 2", ""));
-        addItem(new Profile("4", "Profile 3", ""));
-        addItem(new Profile("5", "Profile 4", ""));
+    public ProfileFactory(Context context) {
+        this.sharedPrefHelper = new SharedPrefHelper(context);
     }
 
-    private static void addItem(Profile item) {
-        ITEMS.add(item);
-        ITEM_MAP.put(item.id, item);
+    public ArrayList<ProfileInfo> getProfileInfoList() {
+        ArrayList<ProfileInfo> profileInfos = new ArrayList<>();
+        profileInfos.add(sharedPrefHelper.getProfileInfo(Constants.DEFAULT_PROFILE_NAME_KEY));
+        profileInfos.add(sharedPrefHelper.getProfileInfo(Constants.PROFILE1_NAME_KEY));
+        profileInfos.add(sharedPrefHelper.getProfileInfo(Constants.PROFILE2_NAME_KEY));
+        profileInfos.add(sharedPrefHelper.getProfileInfo(Constants.PROFILE3_NAME_KEY));
+        profileInfos.add(sharedPrefHelper.getProfileInfo(Constants.PROFILE4_NAME_KEY));
+
+        Log.d(Constants.LOGGER_TAG, profileInfos.toString());
+
+        return profileInfos;
     }
 
-    public static class Profile {
-        public final String id;
-        public final String content;
-        public final String details;
+    public static class ProfileInfo {
+        private String id;
+        private String displayTitle;
+        private String bluetoothValue;
+        private String details;
 
-        public Profile(String id, String content, String details) {
+        public ProfileInfo(String id, String displayTitle, String bluetoothValue, String details) {
             this.id = id;
-            this.content = content;
+            this.displayTitle = displayTitle;
+            this.bluetoothValue = bluetoothValue;
             this.details = details;
         }
 
+        public String getId() {
+            return id;
+        }
+
+        public String getDisplayTitle() {
+            return displayTitle;
+        }
+
+        public void setDisplayTitle(String newDisplayTitle) {
+            this.displayTitle = newDisplayTitle;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public void setBluetoothValue(String bluetoothValue) {
+            this.bluetoothValue = bluetoothValue;
+        }
+
+        public void setDetails(String details) {
+            this.details = details;
+        }
+
+        public String getBluetoothValue() {
+            return bluetoothValue;
+        }
+
+        public String getDetails() {
+            return details;
+        }
+
+
+
         @Override
         public String toString() {
-            return content;
+            return "ProfileInfo{" +
+                    "id='" + id + '\'' +
+                    ", displayTitle='" + displayTitle + '\'' +
+                    ", bluetoothValue='" + bluetoothValue + '\'' +
+                    ", details='" + details + '\'' +
+                    '}';
         }
     }
 }

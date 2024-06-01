@@ -16,4 +16,6 @@
     <string name="temperature">Temperature</string>
     <string name="blooming">Blooming</string>
     <string name="next">Next</string>
+    <string name="edit_profile_name">Edit Profile Name</string>
+    <string name="save">Save</string>
 </resources>

@@ -102,6 +102,8 @@ public class MainActivity extends AppCompatActivity implements
         profileCreationViewModel = new ViewModelProvider(this).get(ProfileCreationViewModel.class);
         profileCreationViewModel.setProfileData(new ProfileData());
 
+        sharedPrefHelper.setDefaultPreferences();
+
         bindSerialService();
     }
 

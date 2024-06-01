@@ -3,20 +3,26 @@ package com.imrezwan.wise_brewer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.imrezwan.wise_brewer.databinding.FragmentProfilesBinding;
-import com.imrezwan.wise_brewer.models.ProfileFactory.Profile;
+import com.imrezwan.wise_brewer.interfaces.IOnProfileEditListener;
+import com.imrezwan.wise_brewer.interfaces.OnItemClickListener;
+import com.imrezwan.wise_brewer.models.ProfileFactory.ProfileInfo;
 
 import java.util.List;
 
 public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHolder> {
 
-    private final List<Profile> mValues;
+    private List<ProfileInfo> mValues;
+    private IOnProfileEditListener mListener;
 
-    public ListViewAdapter(List<Profile> items) {
+    public ListViewAdapter(List<ProfileInfo> items,IOnProfileEditListener mListener) {
         mValues = items;
+        this.mListener = mListener;
     }
 
     @Override
@@ -26,10 +32,16 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
 
     }
 
+    public void updateData(List<ProfileInfo> items) {
+        this.mValues = items;
+        notifyDataSetChanged();
+    }
+
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mContentView.setText(mValues.get(position).getDisplayTitle());
+        holder.mEditProfileName.setOnClickListener(view -> mListener.onEditButtonClicked(mValues.get(position)));
     }
 
     @Override
@@ -39,11 +51,13 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView mContentView;
-        public Profile mItem;
+        public final ImageView mEditProfileName;
+        public ProfileInfo mItem;
 
         public ViewHolder(FragmentProfilesBinding binding) {
             super(binding.getRoot());
             mContentView = binding.profileName;
+            mEditProfileName = binding.ivEditProfileName;
         }
 
         @Override

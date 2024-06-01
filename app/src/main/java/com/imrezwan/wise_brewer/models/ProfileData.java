@@ -63,6 +63,17 @@ public class ProfileData {
         this.extraction5Speed = extraction5Speed;
         this.extraction5Pause = extraction5Pause;
     }
+    
+    public int getRemainingWater() {
+        return
+            this.baseAmountOfWater -
+            this.bloomWater -
+            this.extraction1Water -
+            this.extraction2Water -
+            this.extraction3Water -
+            this.extraction4Water -
+            this.extraction5Water;
+    }
 
     public int getBaseTemperature() {
         return baseTemperature;

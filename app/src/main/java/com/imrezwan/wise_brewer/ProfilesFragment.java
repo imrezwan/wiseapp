@@ -2,45 +2,39 @@ package com.imrezwan.wise_brewer;
 
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.imrezwan.wise_brewer.interfaces.IOnProfileEditListener;
 import com.imrezwan.wise_brewer.models.ProfileFactory;
 import com.imrezwan.wise_brewer.utils.FragmentHandler;
-import com.imrezwan.wise_brewer.view_models.ProfileCreationViewModel;
 
 public class ProfilesFragment extends Fragment {
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    private int mColumnCount = 1;
+    private ListViewAdapter profileListAdapter;
+    private SharedPrefHelper sharedPrefHelper;
+    private ProfileFactory profileFactory;
 
     public ProfilesFragment() {
     }
 
-    public static ProfilesFragment newInstance(int columnCount) {
+    public static ProfilesFragment newInstance() {
         ProfilesFragment fragment = new ProfilesFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
     }
 
     @Override
@@ -48,20 +42,56 @@ public class ProfilesFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile_list, container, false);
         CardView mNewProfileBtn = view.findViewById(R.id.card_new_profile_btn);
+        profileFactory = new ProfileFactory(getContext());
+        sharedPrefHelper = new SharedPrefHelper(getContext());
         mNewProfileBtn.setOnClickListener(view1 ->
                 FragmentHandler.replaceFragment(getActivity(), new ProfileSetupFragment(), "profilesetup")
         );
 
         RecyclerView rvProfileList = view.findViewById(R.id.rv_profile_list);
-        if (rvProfileList instanceof RecyclerView) {
-            Context context = view.getContext();
-            if (mColumnCount <= 1) {
-                rvProfileList.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                rvProfileList.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+
+        profileListAdapter = new ListViewAdapter(profileFactory.getProfileInfoList(), new IOnProfileEditListener() {
+            @Override
+            public void onEditButtonClicked(ProfileFactory.ProfileInfo profileInfo) {
+                showAlertDialogButtonClicked(profileInfo);
             }
-            rvProfileList.setAdapter(new ListViewAdapter(ProfileFactory.ITEMS));
-        }
+        });
+
+        rvProfileList.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        rvProfileList.setAdapter(profileListAdapter);
         return view;
+    }
+
+    public void showAlertDialogButtonClicked(ProfileFactory.ProfileInfo profileInfo) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.TransparentDialog);
+        builder.setCancelable(true);
+
+        final View customLayout = getLayoutInflater().inflate(R.layout.edit_profile_name, null);
+        builder.setView(customLayout);
+
+        EditText mEvProfileName = customLayout.findViewById(R.id.et_profile_name);
+        CardView mSaveProfileName = customLayout.findViewById(R.id.card_save_profile_name);
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        mEvProfileName.setText(profileInfo.getDisplayTitle());
+        mEvProfileName.setSelection(mEvProfileName.getText().length());
+        AlertDialog dialog = builder.create();
+
+        mSaveProfileName.setOnClickListener(view -> {
+            String newProfileName = mEvProfileName.getText().toString().trim();
+            profileInfo.setDisplayTitle(newProfileName);
+            sharedPrefHelper.setProfileInfo(profileInfo);
+            profileListAdapter.updateData(profileFactory.getProfileInfoList());
+            imm.hideSoftInputFromWindow(mEvProfileName.getWindowToken(), 0);
+
+            sendDialogDataToActivity("'"+mEvProfileName.getText().toString()+"' Profile Name is successfully saved.");
+
+            dialog.dismiss();
+        });
+        dialog.show();
+    }
+
+    private void sendDialogDataToActivity(String data) {
+        Toast.makeText(getContext(), data, Toast.LENGTH_SHORT).show();
     }
 }
