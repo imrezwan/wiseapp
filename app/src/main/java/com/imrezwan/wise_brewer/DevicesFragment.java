@@ -4,10 +4,13 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,14 +23,23 @@ import android.widget.TextView;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.ListFragment;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.imrezwan.wise_brewer.interfaces.IBluetoothConnector;
+import com.imrezwan.wise_brewer.utils.Constants;
+import com.imrezwan.wise_brewer.utils.FragmentHandler;
+import com.imrezwan.wise_brewer.view_models.BluetoothViewModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class DevicesFragment extends ListFragment {
-
+    private BluetoothViewModel bluetoothViewModel;
+    private IBluetoothConnector bluetoothConnector;
     private BluetoothAdapter bluetoothAdapter;
     private final ArrayList<BluetoothDevice> listItems = new ArrayList<>();
     private ArrayAdapter<BluetoothDevice> listAdapter;
@@ -42,6 +54,7 @@ public class DevicesFragment extends ListFragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         sharedPrefHelper = SharedPrefHelper.newInstance(getContext());
+        bluetoothViewModel= new ViewModelProvider(requireActivity()).get(BluetoothViewModel.class);
         if(getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH))
             bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         listAdapter = new ArrayAdapter<BluetoothDevice>(getActivity(), 0, listItems) {
@@ -53,9 +66,11 @@ public class DevicesFragment extends ListFragment {
                     view = getActivity().getLayoutInflater().inflate(R.layout.device_list_item, parent, false);
                 TextView text1 = view.findViewById(R.id.text1);
                 TextView text2 = view.findViewById(R.id.text2);
-                @SuppressLint("MissingPermission") String deviceName = device.getName();
-                text1.setText(deviceName);
-                text2.setText(device.getAddress());
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                    String deviceName = device.getName();
+                    text1.setText(deviceName);
+                    text2.setText(device.getAddress());
+                }
                 return view;
             }
         };
@@ -91,6 +106,16 @@ public class DevicesFragment extends ListFragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            bluetoothConnector = (IBluetoothConnector) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement IBluetoothConnector");
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.bt_settings) {
@@ -118,9 +143,10 @@ public class DevicesFragment extends ListFragment {
                     menu.findItem(R.id.bt_refresh).setVisible(permissionMissing);
             }
             if(!permissionMissing) {
-                for (BluetoothDevice device : bluetoothAdapter.getBondedDevices())
+                for (BluetoothDevice device : bluetoothAdapter.getBondedDevices()) {
                     if (device.getType() != BluetoothDevice.DEVICE_TYPE_LE)
                         listItems.add(device);
+                }
                 Collections.sort(listItems, BluetoothUtil::compareTo);
             }
         }
@@ -138,11 +164,11 @@ public class DevicesFragment extends ListFragment {
     @Override
     public void onListItemClick(@NonNull ListView l, @NonNull View v, int position, long id) {
         BluetoothDevice device = listItems.get(position-1);
-        Bundle args = new Bundle();
-        args.putString("device", device.getAddress());
-        Fragment fragment = new HomeFragment2();
-        fragment.setArguments(args);
-        sharedPrefHelper.setString("deviceAddress", device.getAddress());
-        getParentFragmentManager().beginTransaction().replace(R.id.fragment, fragment, "home").addToBackStack(null).commit();
+        sharedPrefHelper.setString(Constants.DEVICE_ADDRESS_KEY, device.getAddress());
+
+        Log.d(Constants.LOGGER_TAG, "Device Address - " + device.getAddress());
+
+        bluetoothConnector.onBluetoothConnect(device.getAddress());
+        FragmentHandler.replaceFragment(getActivity(), HomeFragment2.newInstance(), "home");
     }
 }

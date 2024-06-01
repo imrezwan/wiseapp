@@ -1,5 +1,6 @@
 package com.imrezwan.wise_brewer;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -8,8 +9,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.os.Build;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
+
+import com.imrezwan.wise_brewer.utils.Constants;
 
 import java.io.IOException;
 import java.security.InvalidParameterException;
@@ -44,20 +49,23 @@ class SerialSocket implements Runnable {
         };
     }
 
+    @SuppressLint("MissingPermission")
     String getName() {
-        if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-            return (device.getName() != null) ? device.getName() : device.getAddress();
-        } else {
-            return "";
-        }
+        return device.getName();
     }
 
     /**
      * connect-success and most connect-errors are returned asynchronously to listener
      */
+
     void connect(SerialListener listener) throws IOException {
         this.listener = listener;
-        context.registerReceiver(disconnectBroadcastReceiver, new IntentFilter(Constants.INTENT_ACTION_DISCONNECT));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.registerReceiver(disconnectBroadcastReceiver, new IntentFilter(Constants.INTENT_ACTION_DISCONNECT), Context.RECEIVER_NOT_EXPORTED);
+        }
+        else {
+            context.registerReceiver(disconnectBroadcastReceiver, new IntentFilter(Constants.INTENT_ACTION_DISCONNECT));
+        }
         Executors.newSingleThreadExecutor().submit(this);
     }
 

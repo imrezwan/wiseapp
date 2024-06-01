@@ -11,4 +11,5 @@
     <string name="pause_sec">Pause (sec)</string>
     <string name="speed_ml_s">Speed (mL/s)</string>
     <string name="water_ml">Water (mL)</string>
+    <string name="not_connected">Not Connected</string>
 </resources>

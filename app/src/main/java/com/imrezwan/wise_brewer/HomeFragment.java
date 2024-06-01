@@ -7,6 +7,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
@@ -79,8 +80,6 @@ public class HomeFragment extends Fragment implements IProfileSender, ServiceCon
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         setRetainInstance(true);
-
-        sharedPrefHelper = SharedPrefHelper.newInstance(getContext());
     }
 
     public void retrieveDeviceAddress() {

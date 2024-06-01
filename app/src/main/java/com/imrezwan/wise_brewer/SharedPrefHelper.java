@@ -19,7 +19,7 @@ public class SharedPrefHelper {
 
     public SharedPrefHelper(Context context) {
         this.context = context;
-        this.pref = context.getSharedPreferences("CoffeePro", MODE_PRIVATE);
+        this.pref = context.getSharedPreferences("WiSE_Brewer", MODE_PRIVATE);
         this.editor = pref.edit();
     }
 

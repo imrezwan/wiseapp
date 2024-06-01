@@ -12,13 +12,10 @@ import android.widget.TextView;
 
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.imrezwan.wise_brewer.fragments.BloomingFragment;
 import com.imrezwan.wise_brewer.interfaces.OnItemClickListener;
 import com.imrezwan.wise_brewer.utils.FragmentHandler;
-import com.imrezwan.wise_brewer.view_models.ProfileCreationViewModel;
 import com.imrezwan.wise_brewer.widgets.CustomRecyclerView;
 
 public class ProfileSetupFragment extends Fragment {

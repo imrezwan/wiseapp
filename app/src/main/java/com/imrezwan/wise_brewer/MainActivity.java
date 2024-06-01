@@ -1,49 +1,58 @@
 package com.imrezwan.wise_brewer;
 
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
-import com.imrezwan.wise_brewer.enums.Connected;
+import com.imrezwan.wise_brewer.enums.Connection;
+import com.imrezwan.wise_brewer.interfaces.IBluetoothConnector;
+import com.imrezwan.wise_brewer.utils.Constants;
 import com.imrezwan.wise_brewer.utils.FragmentHandler;
-import com.imrezwan.wise_brewer.view_models.ProfileCreationViewModel;
+import com.imrezwan.wise_brewer.view_models.BluetoothViewModel;
 
 import java.util.ArrayDeque;
 
-public class MainActivity extends AppCompatActivity implements IProfileSender, ServiceConnection, SerialListener, FragmentManager.OnBackStackChangedListener, SharedPreferences.OnSharedPreferenceChangeListener {
+public class MainActivity extends AppCompatActivity implements
+        IProfileSender, ServiceConnection, SerialListener,
+        FragmentManager.OnBackStackChangedListener,
+        IBluetoothConnector {
     Toolbar toolbar;
     BottomNavigationView bottomNavigationView;
     private SharedPrefHelper sharedPrefHelper;
+
+    private BluetoothViewModel bluetoothViewModel;
 
     private String deviceAddress;
     
     private SerialService service;
     private String receiveText = "";
 
+    private boolean hexEnabled = false;
+    private boolean pendingNewline = false;
+    private String newline = TextUtil.newline_crlf;
+    private long lastCallTime = System.currentTimeMillis();
+
     private boolean initialStart = true;
 
-    private Connected connected = Connected.False;
+    private Connection connection = Connection.False;
     private boolean isActivityResumed = false;
 
     @Override
@@ -54,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements IProfileSender, S
         setupToolbar();
         setupBottomNavigationBar();
         getSupportFragmentManager().addOnBackStackChangedListener(this);
-        retrieveDeviceAddress();
         if (savedInstanceState == null)
             FragmentHandler.replaceFragment(this, HomeFragment2.newInstance(), "home");
         else
@@ -84,7 +92,10 @@ public class MainActivity extends AppCompatActivity implements IProfileSender, S
     public void init() {
         toolbar = findViewById(R.id.toolbar);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
-        sharedPrefHelper = SharedPrefHelper.newInstance(this);
+        bluetoothViewModel= new ViewModelProvider(this).get(BluetoothViewModel.class);
+        sharedPrefHelper = new SharedPrefHelper(this);
+
+        bindSerialService();
     }
 
     @Override
@@ -102,12 +113,14 @@ public class MainActivity extends AppCompatActivity implements IProfileSender, S
             return true;
         }
         else if (id == R.id.bluetooth_connect) {
-            if(!sharedPrefHelper.getString("deviceAddress", "").isEmpty() &&
+            if(!sharedPrefHelper.getString(Constants.DEVICE_ADDRESS_KEY, "").isEmpty() &&
                     BluetoothAdapter.checkBluetoothAddress(sharedPrefHelper.getString(Constants.DEVICE_ADDRESS_KEY, ""))
             ){
-                deviceAddress = sharedPrefHelper.getString("deviceAddress", "");
+                deviceAddress = sharedPrefHelper.getString(Constants.DEVICE_ADDRESS_KEY, "");
+                Log.d(Constants.LOGGER_TAG, "conneting device - " + deviceAddress);
 
 //                setStatus("Connecting...", R.color.textColor);
+                bluetoothViewModel.setBluetoothStatus(Connection.Pending);
 //                cardStart.setClickable(true);
                 connect();
             }
@@ -135,12 +148,18 @@ public class MainActivity extends AppCompatActivity implements IProfileSender, S
     @Override
     public void onDestroy() {
         Log.d("TAGGGGGGGG", "DESTROYINGGGGGGGGGGGGGGGGGGGGGG HOME");
-        if (connected != Connected.False)
+        if (connection != Connection.False)
             disconnect();
         this.stopService(new Intent(this, SerialService.class));
-        SharedPreferences sharedPreferences = getSharedPreferences("your_prefs", Context.MODE_PRIVATE);
-        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+        sharedPrefHelper.pref.unregisterOnSharedPreferenceChangeListener((sharedPreferences1, s) -> {});
         super.onDestroy();
+    }
+
+    private void bindSerialService() {
+        if(service == null)  {
+            Log.e(Constants.LOGGER_TAG, "Serivce null , but trying to bind");
+        }
+        this.bindService(new Intent(this, SerialService.class), this, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -148,8 +167,10 @@ public class MainActivity extends AppCompatActivity implements IProfileSender, S
         super.onStart();
         if(service != null)
             service.attach(this);
-        else
-            this.startService(new Intent(this, SerialService.class)); // prevents service destroy on unbind from recreated activity caused by orientation change
+        else {
+            this.startService(new Intent(this, SerialService.class));
+            Log.d(Constants.LOGGER_TAG, "Starting service");
+        }
     }
 
     @Override
@@ -165,6 +186,7 @@ public class MainActivity extends AppCompatActivity implements IProfileSender, S
         if(initialStart && service != null) {
             initialStart = false;
             isActivityResumed = true;
+            retrieveDeviceAddress();
             this.runOnUiThread(this::connect);
         }
     }
@@ -190,34 +212,41 @@ public class MainActivity extends AppCompatActivity implements IProfileSender, S
     }
 
     private void disconnect() {
-        connected = Connected.False;
+        connection = Connection.False;
         service.disconnect();
     }
 
     private void connect() {
         try {
+            Log.d(Constants.LOGGER_TAG, "Connecting..." + deviceAddress);
             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             BluetoothDevice device = bluetoothAdapter.getRemoteDevice(deviceAddress);
-            connected = Connected.Pending;
+            connection = Connection.Pending;
 //            setStatus("Connecting...", R.color.textColor);
+            bluetoothViewModel.setBluetoothStatus(Connection.Pending);
             SerialSocket socket = new SerialSocket(this.getApplicationContext(), device);
             service.connect(socket);
+
         } catch (Exception e) {
             onSerialConnectError(e);
         }
     }
 
     public void retrieveDeviceAddress() {
-        if(!sharedPrefHelper.getString("deviceAddress", "").isEmpty() &&
-                BluetoothAdapter.checkBluetoothAddress(sharedPrefHelper.getString("deviceAddress", ""))
+        if(!sharedPrefHelper.getString(Constants.DEVICE_ADDRESS_KEY, "").isEmpty() &&
+                BluetoothAdapter.checkBluetoothAddress(sharedPrefHelper.getString(Constants.DEVICE_ADDRESS_KEY, ""))
         ){
-            deviceAddress = sharedPrefHelper.getString("deviceAddress", "");
+            deviceAddress = sharedPrefHelper.getString(Constants.DEVICE_ADDRESS_KEY, "");
+            Log.d(Constants.LOGGER_TAG, "Retrive Device-" + deviceAddress);
 
 //            setStatus("Connecting...", R.color.textColor);
+            bluetoothViewModel.setBluetoothStatus(Connection.Pending);
 //            cardStart.setClickable(true);
+            connect();
         }
         else {
 //            setStatus("Not Connected !", android.R.color.holo_red_light);
+            bluetoothViewModel.setBluetoothStatus(Connection.False);
 //            cardStart.setClickable(false);
         }
     }
@@ -237,13 +266,16 @@ public class MainActivity extends AppCompatActivity implements IProfileSender, S
     @Override
     public void onSerialConnect() {
 //        setStatus("Connected", android.R.color.holo_green_dark);
-        connected = Connected.True;
+        bluetoothViewModel.setBluetoothStatus(Connection.True);
+        connection = Connection.True;
         Toast.makeText(this, "Bluetooth CONNECTED", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onSerialConnectError(Exception e) {
 //        setStatus("Connection failed !", android.R.color.holo_red_light);
+        bluetoothViewModel.setBluetoothStatus(Connection.Error);
+        Log.d(Constants.LOGGER_TAG, "Exception-" + e.getMessage() + "==>>" + e.getCause());
         Toast.makeText(this, "CONNECTION ERROR", Toast.LENGTH_LONG).show();
         disconnect();
     }
@@ -252,11 +284,65 @@ public class MainActivity extends AppCompatActivity implements IProfileSender, S
     public void onSerialRead(byte[] data) {
         ArrayDeque<byte[]> datas = new ArrayDeque<>();
         datas.add(data);
-//        receive(datas);
+        receive(datas);
     }
 
     public void onSerialRead(ArrayDeque<byte[]> datas) {
-//        receive(datas);
+        receive(datas);
+    }
+
+    private void receive(ArrayDeque<byte[]> datas) {
+        SpannableStringBuilder spn = new SpannableStringBuilder();
+        for (byte[] data : datas) {
+            if (hexEnabled) {
+                spn.append(TextUtil.toHexString(data)).append('\n');
+            } else {
+                String msg = new String(data);
+                if (newline.equals(TextUtil.newline_crlf) && msg.length() > 0) {
+                    // don't show CR as ^M if directly before LF
+                    msg = msg.replace(TextUtil.newline_crlf, TextUtil.newline_lf);
+                    // special handling if CR and LF come in separate fragments
+                    if (pendingNewline && msg.charAt(0) == '\n') {
+                        if(spn.length() >= 2) {
+                            spn.delete(spn.length() - 2, spn.length());
+                        }
+                    }
+                    pendingNewline = msg.charAt(msg.length() - 1) == '\r';
+                }
+                spn.append(TextUtil.toCaretString(msg, newline.length() != 0));
+            }
+        }
+        receiveText = spn.toString();
+        String newString = receiveText.substring(0, receiveText.length() - 1);
+        Log.d("COFFEE_TAG", receiveText);
+        Log.d("COFFEE_TAG_Length",Integer.toString(newString.length()));
+        String[] coffeeDataArr = receiveText.split(",");
+
+//        Toast.makeText(getActivity(), "Received: " + receiveText, Toast.LENGTH_SHORT).show();
+        if(newString.equals("OK")||receiveText.equalsIgnoreCase("OK") /*&& !isCounting*/) {
+            //startCountDownTimer(); // disable
+            Toast.makeText(this, "STARTED", Toast.LENGTH_SHORT).show();
+            MediaPlayer mPlayer = MediaPlayer.create(this, R.raw.beep_start);
+            mPlayer.start();
+        }
+        else if(newString.equals("DONE") || receiveText.equals("DONE")) {
+            Toast.makeText(this, "YOUR COFFEE IS READY", Toast.LENGTH_LONG ).show();
+            MediaPlayer mPlayer = MediaPlayer.create(this, R.raw.beep);
+            mPlayer.start();
+//            updateStartButton(true);
+//            tvStart.setText("START");
+//            tvStart.setTextColor(getResources().getColor(android.R.color.black));
+//            tvStart.setTextColor(getResources().getColor(android.R.color.black));
+        }
+        else if(coffeeDataArr.length == 5) {
+            long currentTime = System.currentTimeMillis();
+//            Log.d("COFFEE_TAG", lastCallTime + " => " + currentTime);
+            if( (currentTime - lastCallTime) > 100) {
+                //Log.d("COFFEE_TAG", "INSIDE ====>>>>>>>>>>>");
+//                setupCoffeeDataOnScreen(coffeeDataArr);
+            }
+            lastCallTime = currentTime;
+        }
     }
 
     @Override
@@ -266,10 +352,10 @@ public class MainActivity extends AppCompatActivity implements IProfileSender, S
     }
 
     @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, @Nullable String key) {
-        if (key.equals(Constants.DEVICE_ADDRESS_KEY)) {
-            deviceAddress = sharedPreferences.getString(key, "");
-            connect();
-        }
+    public void onBluetoothConnect(String deviceAddress) {
+        Log.d(Constants.LOGGER_TAG, "Trying to connect with Bluetooth - " + deviceAddress);
+        sharedPrefHelper.setString(Constants.DEVICE_ADDRESS_KEY, deviceAddress);
+        this.deviceAddress = deviceAddress;
+        connect();
     }
 }

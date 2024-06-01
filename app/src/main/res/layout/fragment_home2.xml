@@ -10,6 +10,28 @@
     tools:context=".HomeFragment2">
 
     <LinearLayout
+        android:id="@+id/ll_bluetooth_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_bluetooth_status"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorDarkBlue"
+            android:padding="5dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="@color/colorWhite"
+            android:text="@string/not_connected"
+            app:drawableLeftCompat="@drawable/bluetooth" />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/ll_selected_profile_block"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
