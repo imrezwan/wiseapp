@@ -47,18 +47,22 @@ public class CustomRecyclerAdapter extends RecyclerView.Adapter<CustomRecyclerAd
             holder.textView.setTextColor(ContextCompat.getColor(mContext, R.color.colorBlack));
         }
         holder.itemView.setOnClickListener(v -> {
-            int previousSelectedItem = selectedItem;
-            selectedItem = holder.getAdapterPosition();
-
-            notifyItemChanged(previousSelectedItem);
-            notifyItemChanged(selectedItem);
-
-            if (onItemClickListener != null) {
-                onItemClickListener.onItemClick(selectedItem);
-            }
+            updateSelectedItem(holder.getAdapterPosition());
         });
 
         holder.itemView.setSelected(selectedItem == position);
+    }
+
+    private void updateSelectedItem(int currentSelectedItem) {
+        int previousSelectedItem = selectedItem;
+        selectedItem = currentSelectedItem;
+
+        notifyItemChanged(previousSelectedItem);
+        notifyItemChanged(selectedItem);
+
+        if (onItemClickListener != null) {
+            onItemClickListener.onItemClick(selectedItem);
+        }
     }
 
     @Override
@@ -68,6 +72,11 @@ public class CustomRecyclerAdapter extends RecyclerView.Adapter<CustomRecyclerAd
 
     public String getSelectedItem() {
         return selectedItem >= 0 ? dataList.get(selectedItem) : null;
+    }
+
+    public void setSelectedItem(String item) {
+        int position = dataList.indexOf(item);
+        updateSelectedItem(position);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

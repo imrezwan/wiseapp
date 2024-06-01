@@ -26,9 +26,11 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.imrezwan.wise_brewer.enums.Connection;
 import com.imrezwan.wise_brewer.interfaces.IBluetoothConnector;
+import com.imrezwan.wise_brewer.models.ProfileData;
 import com.imrezwan.wise_brewer.utils.Constants;
 import com.imrezwan.wise_brewer.utils.FragmentHandler;
 import com.imrezwan.wise_brewer.view_models.BluetoothViewModel;
+import com.imrezwan.wise_brewer.view_models.ProfileCreationViewModel;
 
 import java.util.ArrayDeque;
 
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements
         IProfileSender, ServiceConnection, SerialListener,
         FragmentManager.OnBackStackChangedListener,
         IBluetoothConnector {
+    ProfileCreationViewModel profileCreationViewModel;
     Toolbar toolbar;
     BottomNavigationView bottomNavigationView;
     private SharedPrefHelper sharedPrefHelper;
@@ -96,6 +99,8 @@ public class MainActivity extends AppCompatActivity implements
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bluetoothViewModel= new ViewModelProvider(this).get(BluetoothViewModel.class);
         sharedPrefHelper = new SharedPrefHelper(this);
+        profileCreationViewModel = new ViewModelProvider(this).get(ProfileCreationViewModel.class);
+        profileCreationViewModel.setProfileData(new ProfileData());
 
         bindSerialService();
     }

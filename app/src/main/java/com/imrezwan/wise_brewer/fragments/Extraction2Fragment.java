@@ -24,13 +24,28 @@ public class Extraction2Fragment extends BaseExtractionFragment {
     }
 
     @Override
-    protected void onNextButtonClicked() {
-        FragmentHandler.replaceFragment(getActivity(), Extraction3Fragment.newInstance(), "extraction3");
+    protected void setExtractionFlag() {
+        profileCreationViewModel.setExtraction2Flag(true);
     }
 
     @Override
-    protected void onPrevButtonClicked() {
+    protected int getExtractionWater() {
+        return profileCreationViewModel.getExtraction2Water();
+    }
 
+    @Override
+    protected int getExtractionSpeed() {
+        return profileCreationViewModel.getExtraction2Speed();
+    }
+
+    @Override
+    protected int getExtractionPause() {
+        return profileCreationViewModel.getExtraction2Pause();
+    }
+
+    @Override
+    protected void onNextButtonClicked() {
+        FragmentHandler.replaceFragment(getActivity(), Extraction3Fragment.newInstance(), "extraction3");
     }
 
     @Override
@@ -40,16 +55,16 @@ public class Extraction2Fragment extends BaseExtractionFragment {
 
     @Override
     protected void onItemClickWater() {
-
+        profileCreationViewModel.setExtraction2Water(Integer.parseInt(mExtractionWater.getSelectedItemData()));
     }
 
     @Override
     protected void onItemClickSpeed() {
-
+        profileCreationViewModel.setExtraction2Speed(Integer.parseInt(mExtractionSpeed.getSelectedItemData()));
     }
 
     @Override
     protected void onItemClickPause() {
-
+        profileCreationViewModel.setExtraction2Pause(Integer.parseInt(mExtractionPause.getSelectedItemData()));
     }
 }

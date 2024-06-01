@@ -13,11 +13,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.imrezwan.wise_brewer.R;
+import com.imrezwan.wise_brewer.view_models.ProfileCreationViewModel;
 import com.imrezwan.wise_brewer.widgets.CustomRecyclerView;
 import com.imrezwan.wise_brewer.widgets.SubtitleView;
 
 public abstract class BaseExtractionFragment extends Fragment {
+    ProfileCreationViewModel profileCreationViewModel;
     CustomRecyclerView mExtractionWater, mExtractionSpeed, mExtractionPause;
     protected TextView mNext, mPrev;
 
@@ -29,6 +33,7 @@ public abstract class BaseExtractionFragment extends Fragment {
         View view = inflater.inflate(getLayoutResId(), container, false);
 
         initialize(view);
+        restoreValues();
 
         mNext.setOnClickListener(v -> onNextButtonClicked());
         mPrev.setOnClickListener(v -> onPrevButtonClicked());
@@ -47,6 +52,8 @@ public abstract class BaseExtractionFragment extends Fragment {
         mNext = view.findViewById(R.id.tv_next);
         mPrev = view.findViewById(R.id.tv_back);
 
+        profileCreationViewModel = new ViewModelProvider(requireActivity()).get(ProfileCreationViewModel.class);
+
         mExtractionWater.setData(mDataWater, position -> {
             onItemClickWater();
         });
@@ -58,9 +65,45 @@ public abstract class BaseExtractionFragment extends Fragment {
         });
     }
 
+    private void restoreValues() {
+        restoreExtractionWater();
+        restoreExtractionSpeed();
+        restoreExtractionPause();
+    }
+
+    private void restoreExtractionWater() {
+        int prevWater = getExtractionWater();
+        if (prevWater > 0 ) {
+            mExtractionWater.setSelectedItem(Integer.toString(prevWater));
+        }
+    }
+
+    private void restoreExtractionSpeed() {
+        int prevSpeed = getExtractionSpeed();
+        if (prevSpeed > 0 ) {
+            mExtractionSpeed.setSelectedItem(Integer.toString(prevSpeed));
+        }
+    }
+
+    private void restoreExtractionPause() {
+        int prevPause = getExtractionPause();
+        if (prevPause > 0 ) {
+            mExtractionPause.setSelectedItem(Integer.toString(prevPause));
+        }
+    }
+
+    private void onPrevButtonClicked() {
+        requireActivity().getOnBackPressedDispatcher().onBackPressed();
+    }
+
+    protected abstract void setExtractionFlag();
+
+    protected abstract int getExtractionWater();
+    protected abstract int getExtractionSpeed();
+    protected abstract int getExtractionPause();
+
     protected abstract int getLayoutResId();
     protected abstract void onNextButtonClicked();
-    protected abstract void onPrevButtonClicked();
     protected abstract String getSubtitle();
     protected abstract void onItemClickWater();
     protected abstract void onItemClickSpeed();

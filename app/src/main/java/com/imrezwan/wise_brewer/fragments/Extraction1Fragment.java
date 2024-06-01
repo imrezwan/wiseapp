@@ -19,6 +19,24 @@ public class Extraction1Fragment extends BaseExtractionFragment {
     }
 
     @Override
+    protected void setExtractionFlag() {}
+
+    @Override
+    protected int getExtractionWater() {
+        return profileCreationViewModel.getExtraction1Water();
+    }
+
+    @Override
+    protected int getExtractionSpeed() {
+        return profileCreationViewModel.getExtraction1Speed();
+    }
+
+    @Override
+    protected int getExtractionPause() {
+        return profileCreationViewModel.getExtraction1Pause();
+    }
+
+    @Override
     protected int getLayoutResId() {
         return R.layout.fragment_extraction;
     }
@@ -29,27 +47,22 @@ public class Extraction1Fragment extends BaseExtractionFragment {
     }
 
     @Override
-    protected void onPrevButtonClicked() {
-
-    }
-
-    @Override
     protected String getSubtitle() {
         return "Extraction #01";
     }
 
     @Override
     protected void onItemClickWater() {
-
+        profileCreationViewModel.setExtraction1Water(Integer.parseInt(mExtractionWater.getSelectedItemData()));
     }
 
     @Override
     protected void onItemClickSpeed() {
-
+        profileCreationViewModel.setExtraction1Speed(Integer.parseInt(mExtractionSpeed.getSelectedItemData()));
     }
 
     @Override
     protected void onItemClickPause() {
-
+        profileCreationViewModel.setExtraction1Pause(Integer.parseInt(mExtractionPause.getSelectedItemData()));
     }
 }

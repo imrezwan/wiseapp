@@ -18,12 +18,22 @@ public class ProfileCreationViewModel extends ViewModel {
     }
 
     // Getter and setter methods for base temperature
-    public void setBaseTemperature(int baseTemperature) {
-        data.getValue().setBaseTemperature(baseTemperature);
+    public void setBaseTemperature(String baseTemperatureStr) {
+        if (baseTemperatureStr != null && !baseTemperatureStr.isEmpty()) {
+            baseTemperatureStr = baseTemperatureStr.substring(0, baseTemperatureStr.length() - 1);
+        }
+        else {
+            baseTemperatureStr = "-1";
+        }
+        data.getValue().setBaseTemperature(Integer.parseInt(baseTemperatureStr));
     }
 
     public int getBaseTemperature() {
         return data.getValue().getBaseTemperature();
+    }
+
+    public String getBaseTemperatureString() {
+        return data.getValue().getBaseTemperature() + "c";
     }
 
     // Getter and setter methods for base amount of water
@@ -231,5 +241,14 @@ public class ProfileCreationViewModel extends ViewModel {
 
     public int getExtraction5Speed() {
         return data.getValue().getExtraction5Speed();
+    }
+
+    // Getter and setter methods for extraction4 pause
+    public void setExtraction5Pause(int extraction5Pause) {
+        data.getValue().setExtraction5Pause(extraction5Pause);
+    }
+
+    public int getExtraction5Pause() {
+        return data.getValue().getExtraction5Pause();
     }
 }

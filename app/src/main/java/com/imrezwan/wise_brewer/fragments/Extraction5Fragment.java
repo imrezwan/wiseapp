@@ -28,8 +28,23 @@ public class Extraction5Fragment  extends BaseExtractionFragment {
     }
 
     @Override
-    protected void onPrevButtonClicked() {
+    protected void setExtractionFlag() {
+        profileCreationViewModel.setExtraction5Flag(true);
+    }
 
+    @Override
+    protected int getExtractionWater() {
+        return profileCreationViewModel.getExtraction5Water();
+    }
+
+    @Override
+    protected int getExtractionSpeed() {
+        return profileCreationViewModel.getExtraction5Speed();
+    }
+
+    @Override
+    protected int getExtractionPause() {
+        return profileCreationViewModel.getExtraction5Pause();
     }
 
     @Override
@@ -39,16 +54,16 @@ public class Extraction5Fragment  extends BaseExtractionFragment {
 
     @Override
     protected void onItemClickWater() {
-
+        profileCreationViewModel.setExtraction5Water(Integer.parseInt(mExtractionWater.getSelectedItemData()));
     }
 
     @Override
     protected void onItemClickSpeed() {
-
+        profileCreationViewModel.setExtraction5Speed(Integer.parseInt(mExtractionSpeed.getSelectedItemData()));
     }
 
     @Override
     protected void onItemClickPause() {
-
+        profileCreationViewModel.setExtraction5Pause(Integer.parseInt(mExtractionPause.getSelectedItemData()));
     }
 }

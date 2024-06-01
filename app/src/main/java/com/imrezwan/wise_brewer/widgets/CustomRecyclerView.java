@@ -52,6 +52,10 @@ public class CustomRecyclerView extends RecyclerView {
         setAdapter(adapter);
     }
 
+    public void setSelectedItem(String item) {
+        adapter.setSelectedItem(item);
+    }
+
     public String getSelectedItemData() {
         return adapter.getSelectedItem();
     }
