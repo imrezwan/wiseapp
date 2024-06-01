@@ -8,12 +8,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 
 import com.imrezwan.wise_brewer.fragments.BloomingFragment;
+import com.imrezwan.wise_brewer.fragments.Extraction1Fragment;
 import com.imrezwan.wise_brewer.interfaces.OnItemClickListener;
 import com.imrezwan.wise_brewer.utils.FragmentHandler;
 import com.imrezwan.wise_brewer.widgets.CustomRecyclerView;
@@ -21,6 +23,8 @@ import com.imrezwan.wise_brewer.widgets.CustomRecyclerView;
 public class ProfileSetupFragment extends Fragment {
     CustomRecyclerView mCrvAmountOfWater, mCrvTemperature;
     NestedScrollView nestedScrollView;
+
+    CheckBox mIsBlooming;
     TextView mNext;
 
     public ProfileSetupFragment() {
@@ -44,9 +48,14 @@ public class ProfileSetupFragment extends Fragment {
 
         nestedScrollView.setNestedScrollingEnabled(true);
 
-        mNext.setOnClickListener(view1 ->
-            FragmentHandler.replaceFragment(getActivity(), new BloomingFragment(), "blooming")
-        );
+        mNext.setOnClickListener(view1 -> {
+            if( mIsBlooming.isChecked()) {
+                FragmentHandler.replaceFragment(getActivity(), BloomingFragment.newInstance(), "blooming");
+            }
+            else {
+                FragmentHandler.replaceFragment(getActivity(), Extraction1Fragment.newInstance(), "extraction1");
+            }
+        });
         return view;
     }
 
@@ -54,6 +63,7 @@ public class ProfileSetupFragment extends Fragment {
         mCrvAmountOfWater = view.findViewById(R.id.crv_amount_of_water);
         mCrvTemperature = view.findViewById(R.id.crv_temperature);
         nestedScrollView = view.findViewById(R.id.nested_scrollview);
+        mIsBlooming = view.findViewById(R.id.cb_is_blooming);
         mNext = view.findViewById(R.id.tv_next);
 
         mCrvAmountOfWater.setData(mDataAmountOfWater, new OnItemClickListener() {
