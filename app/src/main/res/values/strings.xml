@@ -12,4 +12,8 @@
     <string name="speed_ml_s">Speed (mL/s)</string>
     <string name="water_ml">Water (mL)</string>
     <string name="not_connected">Not Connected</string>
+    <string name="amount_of_water">Amount Of Water</string>
+    <string name="temperature">Temperature</string>
+    <string name="blooming">Blooming</string>
+    <string name="next">Next</string>
 </resources>

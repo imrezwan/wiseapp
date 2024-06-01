@@ -34,7 +34,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Amount Of Water"
+                    android:text="@string/amount_of_water"
                     android:textStyle="bold"
                     android:textColor="@color/colorPrimary"
                     android:layout_gravity="center"
@@ -61,7 +61,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Temperature"
+                    android:text="@string/temperature"
                     android:textStyle="bold"
                     android:textColor="@color/colorPrimary"
                     android:layout_gravity="center"
@@ -94,7 +94,7 @@
                     android:textColor="@color/colorPrimary"
                     android:textSize="20sp"
                     android:buttonTint="@color/colorPrimary"
-                    android:text="Blooming" />
+                    android:text="@string/blooming" />
 
             </LinearLayout>
 
@@ -110,18 +110,19 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="10dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="10dp"
                     android:clickable="true"
+                    android:focusable="true"
                     app:cardCornerRadius="10dp">
                     <TextView
                         android:id="@+id/tv_next"
                         android:layout_width="100dp"
                         android:layout_height="50dp"
-                        android:text="Next"
+                        android:text="@string/next"
                         android:textAllCaps="true"
                         android:layout_weight="1"
-                        android:drawableRight="@drawable/arrow_circle_right"
+                        app:drawableRightCompat="@drawable/arrow_circle_right"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintLeft_toRightOf="@+id/tv_back"
