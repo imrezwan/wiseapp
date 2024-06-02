@@ -66,7 +66,15 @@ public class DevicesFragment extends ListFragment {
                     view = getActivity().getLayoutInflater().inflate(R.layout.device_list_item, parent, false);
                 TextView text1 = view.findViewById(R.id.text1);
                 TextView text2 = view.findViewById(R.id.text2);
-                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+                        String deviceName = device.getName();
+                        text1.setText(deviceName);
+                        text2.setText(device.getAddress());
+                    } else {
+                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.BLUETOOTH_CONNECT }, Constants.REQUEST_BLUETOOTH_CONNECT);
+                    }
+                } else {
                     String deviceName = device.getName();
                     text1.setText(deviceName);
                     text2.setText(device.getAddress());
@@ -146,6 +154,7 @@ public class DevicesFragment extends ListFragment {
                 for (BluetoothDevice device : bluetoothAdapter.getBondedDevices()) {
                     if (device.getType() != BluetoothDevice.DEVICE_TYPE_LE)
                         listItems.add(device);
+                    Log.d(Constants.LOGGER_TAG, "Device - " + device.getName() + " - Address - " + device.getAddress());
                 }
                 Collections.sort(listItems, BluetoothUtil::compareTo);
             }

@@ -1,5 +1,6 @@
 package com.imrezwan.wise_brewer;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
@@ -27,6 +28,7 @@ class SerialSocket implements Runnable {
     private static final UUID BLUETOOTH_SPP = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     private final BroadcastReceiver disconnectBroadcastReceiver;
+    private static final int REQUEST_BLUETOOTH_CONNECT = 1;
 
     private final Context context;
     private SerialListener listener;
@@ -94,13 +96,20 @@ class SerialSocket implements Runnable {
     @Override
     public void run() { // connect & read
         try {
-            if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+                    socket = device.createRfcommSocketToServiceRecord(BLUETOOTH_SPP);
+                    socket.connect();
+                } else {
+                    ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.BLUETOOTH_CONNECT }, Constants.REQUEST_BLUETOOTH_CONNECT);
+                    return;
+                }
+            } else {
                 socket = device.createRfcommSocketToServiceRecord(BLUETOOTH_SPP);
                 socket.connect();
-                if(listener != null)
-                    listener.onSerialConnect();
             }
-
+            if(listener != null)
+                listener.onSerialConnect();
         } catch (Exception e) {
             if(listener != null)
                 listener.onSerialConnectError(e);

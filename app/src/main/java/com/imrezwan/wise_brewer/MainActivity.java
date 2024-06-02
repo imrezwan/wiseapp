@@ -277,6 +277,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onServiceDisconnected(ComponentName name) {
         service = null;
+        bluetoothViewModel.setBluetoothStatus(Connection.False);
     }
 
     @Override
