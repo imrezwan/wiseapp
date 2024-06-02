@@ -23,9 +23,6 @@ public class ProfileFactory {
         profileInfos.add(sharedPrefHelper.getProfileInfo(Constants.PROFILE2_NAME_KEY));
         profileInfos.add(sharedPrefHelper.getProfileInfo(Constants.PROFILE3_NAME_KEY));
         profileInfos.add(sharedPrefHelper.getProfileInfo(Constants.PROFILE4_NAME_KEY));
-
-        Log.d(Constants.LOGGER_TAG, profileInfos.toString());
-
         return profileInfos;
     }
 

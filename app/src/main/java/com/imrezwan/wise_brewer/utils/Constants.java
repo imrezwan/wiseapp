@@ -37,4 +37,8 @@ public class Constants {
     public static final String PROFILE4_NAME_ID = "5";
     public static ProfileInfo PROFILE4_NAME_VALUE = new ProfileInfo(PROFILE4_NAME_ID, "Profile 4", "profile4", "");
     public static String IS_DEFAULT_PROFILE_PREF_SET_KEY = "isDefaultProfilePrefSet";
+
+
+    public static final String SELECTED_PROFILE_KEY = "selectedProfileKey";
+
 }
