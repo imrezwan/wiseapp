@@ -20,4 +20,5 @@
     <string name="save">Save</string>
     <string name="default_txt">Default</string>
     <string name="selected_profile">Selected Profile</string>
+    <string name="ready">READY</string>
 </resources>

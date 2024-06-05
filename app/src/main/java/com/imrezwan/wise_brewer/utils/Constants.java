@@ -42,4 +42,21 @@ public class Constants {
 
     public static final String SELECTED_PROFILE_KEY = "selectedProfileKey";
 
+
+//  BLUETOOTH SENDING CODES
+    public static final int INITIAL_SCREEN_DATA = 70;
+
+    public static final int PREDEFINED_PROFILE_DEFAULT_CODE = 80;
+    public static final int PREDEFINED_PROFILE_PROFILE1_CODE = 81;
+    public static final int PREDEFINED_PROFILE_PROFILE2_CODE = 82;
+    public static final int PREDEFINED_PROFILE_PROFILE3_CODE = 83;
+    public static final int PREDEFINED_PROFILE_PROFILE4_CODE = 84;
+
+
+    public static final int PROFILE_DATA_SEND_DEFAULT_CODE = 90;
+    public static final int PROFILE_DATA_SEND_PROFILE_PROFILE1_CODE = 91;
+    public static final int PROFILE_DATA_SEND_PROFILE_PROFILE2_CODE = 92;
+    public static final int PROFILE_DATA_SEND_PROFILE_PROFILE3_CODE = 93;
+    public static final int PROFILE_DATA_SEND_PROFILE_PROFILE4_CODE = 94;
+
 }

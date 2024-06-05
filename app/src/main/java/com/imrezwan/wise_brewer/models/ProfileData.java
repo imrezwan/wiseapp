@@ -1,6 +1,7 @@
 package com.imrezwan.wise_brewer.models;
 
 public class ProfileData {
+    private ProfileFactory.ProfileInfo profileInfo;
     private int baseTemperature = 0;
     private int baseAmountOfWater = 0;
 
@@ -73,6 +74,14 @@ public class ProfileData {
             this.extraction3Water -
             this.extraction4Water -
             this.extraction5Water;
+    }
+
+    public ProfileFactory.ProfileInfo getProfileInfo() {
+        return profileInfo;
+    }
+
+    public void setProfileInfo(ProfileFactory.ProfileInfo profileInfo) {
+        this.profileInfo = profileInfo;
     }
 
     public int getBaseTemperature() {

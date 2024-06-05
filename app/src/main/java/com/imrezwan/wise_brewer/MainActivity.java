@@ -9,7 +9,9 @@ import android.content.ServiceConnection;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,6 +28,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.imrezwan.wise_brewer.enums.Connection;
 import com.imrezwan.wise_brewer.interfaces.IBluetoothConnector;
+import com.imrezwan.wise_brewer.interfaces.IBluetoothDataCommunication;
 import com.imrezwan.wise_brewer.models.ProfileData;
 import com.imrezwan.wise_brewer.utils.Constants;
 import com.imrezwan.wise_brewer.utils.FragmentHandler;
@@ -37,7 +40,9 @@ import java.util.ArrayDeque;
 public class MainActivity extends AppCompatActivity implements
         IProfileSender, ServiceConnection, SerialListener,
         FragmentManager.OnBackStackChangedListener,
-        IBluetoothConnector {
+        IBluetoothConnector,
+        IBluetoothDataCommunication
+{
     ProfileCreationViewModel profileCreationViewModel;
     Toolbar toolbar;
     BottomNavigationView bottomNavigationView;
@@ -56,8 +61,6 @@ public class MainActivity extends AppCompatActivity implements
     private long lastCallTime = System.currentTimeMillis();
 
     private boolean initialStart = true;
-
-    private Connection connection = Connection.False;
     private boolean isActivityResumed = false;
 
     @Override
@@ -105,6 +108,10 @@ public class MainActivity extends AppCompatActivity implements
         sharedPrefHelper.setDefaultPreferences();
 
         bindSerialService();
+    }
+
+    public Connection getBluetoothStatus() {
+        return bluetoothViewModel.getBluetoothStatus().getValue();
     }
 
     @Override
@@ -171,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onDestroy() {
         Log.d("TAGGGGGGGG", "DESTROYINGGGGGGGGGGGGGGGGGGGGGG HOME");
-        if (connection != Connection.False)
+        if (getBluetoothStatus() != Connection.False)
             disconnect();
         this.stopService(new Intent(this, SerialService.class));
         sharedPrefHelper.pref.unregisterOnSharedPreferenceChangeListener((sharedPreferences1, s) -> {});
@@ -235,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void disconnect() {
-        connection = Connection.False;
+        bluetoothViewModel.setBluetoothStatus(Connection.False);
         service.disconnect();
     }
 
@@ -244,7 +251,6 @@ public class MainActivity extends AppCompatActivity implements
             Log.d(Constants.LOGGER_TAG, "Connecting..." + deviceAddress);
             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             BluetoothDevice device = bluetoothAdapter.getRemoteDevice(deviceAddress);
-            connection = Connection.Pending;
 //            setStatus("Connecting...", R.color.textColor);
             bluetoothViewModel.setBluetoothStatus(Connection.Pending);
             SerialSocket socket = new SerialSocket(this.getApplicationContext(), device);
@@ -274,6 +280,36 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    private void send(String str) {
+        if(bluetoothViewModel.getBluetoothStatus().getValue() != Connection.True) {
+            Toast.makeText(this, "Not connected", Toast.LENGTH_SHORT).show();
+            bluetoothViewModel.setBluetoothStatus(Connection.False);
+            return;
+        }
+        try {
+            String msg;
+            byte[] data;
+            if(hexEnabled) {
+                StringBuilder sb = new StringBuilder();
+                TextUtil.toHexString(sb, TextUtil.fromHexString(str));
+                TextUtil.toHexString(sb, newline.getBytes());
+                msg = sb.toString();
+                data = TextUtil.fromHexString(msg);
+            } else {
+                msg = str;
+                data = (str + newline).getBytes();
+            }
+            SpannableStringBuilder spn = new SpannableStringBuilder(msg + '\n');
+            spn.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorSendText)), 0, spn.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+//            Toast.makeText(getActivity(), "Sent: " + str, Toast.LENGTH_SHORT).show();
+            service.write(data);
+
+        } catch (Exception e) {
+            onSerialIoError(e);
+        }
+    }
+
     @Override
     public void onServiceDisconnected(ComponentName name) {
         service = null;
@@ -291,7 +327,6 @@ public class MainActivity extends AppCompatActivity implements
     public void onSerialConnect() {
 //        setStatus("Connected", android.R.color.holo_green_dark);
         bluetoothViewModel.setBluetoothStatus(Connection.True);
-        connection = Connection.True;
         Toast.makeText(this, "Bluetooth CONNECTED", Toast.LENGTH_LONG).show();
     }
 
@@ -310,6 +345,8 @@ public class MainActivity extends AppCompatActivity implements
         datas.add(data);
         receive(datas);
     }
+
+
 
     public void onSerialRead(ArrayDeque<byte[]> datas) {
         receive(datas);
@@ -381,5 +418,10 @@ public class MainActivity extends AppCompatActivity implements
         sharedPrefHelper.setString(Constants.DEVICE_ADDRESS_KEY, deviceAddress);
         this.deviceAddress = deviceAddress;
         connect();
+    }
+
+    @Override
+    public void onDataSend(String data) {
+        send(data);
     }
 }

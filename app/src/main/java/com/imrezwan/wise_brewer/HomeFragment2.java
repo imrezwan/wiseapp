@@ -1,5 +1,6 @@
 package com.imrezwan.wise_brewer;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,11 +11,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.imrezwan.wise_brewer.enums.Connection;
+import com.imrezwan.wise_brewer.interfaces.IBluetoothConnector;
+import com.imrezwan.wise_brewer.interfaces.IBluetoothDataCommunication;
 import com.imrezwan.wise_brewer.models.ProfileFactory;
 import com.imrezwan.wise_brewer.utils.Constants;
 import com.imrezwan.wise_brewer.view_models.BluetoothViewModel;
@@ -26,6 +30,7 @@ public class HomeFragment2 extends Fragment {
     private TextView mBluetoothStatus, mSelectedProfile;
     private ImageView mIvSelectedProfileArrow;
     private SharedPrefHelper sharedPrefHelper;
+    private IBluetoothDataCommunication bluetoothDataCommunicationlistener;
     public HomeFragment2() {
     }
 
@@ -72,21 +77,26 @@ public class HomeFragment2 extends Fragment {
     private void updateBluetoothStatus(Connection connection) {
         switch (connection) {
             case Error:
-                mBluetoothStatus.setText("Connection Error");
+                setBluetoothStatusOnUI("Connection Error", R.color.colorAccent);
                 break;
             case True:
-                mBluetoothStatus.setText("Connected");
+                setBluetoothStatusOnUI("Connected", R.color.colorGreen);
                 break;
             case Pending:
-                mBluetoothStatus.setText("Connecting...");
+                setBluetoothStatusOnUI("Connecting...", R.color.colorDarkBlue);
                 break;
             case False:
-                mBluetoothStatus.setText("Not Connected");
+                setBluetoothStatusOnUI("Not Connected", R.color.colorText);
                 break;
             default:
-                mBluetoothStatus.setText("Connection Undetermined");
+                setBluetoothStatusOnUI("Connection Undetermined", R.color.colorBlack);
                 break;
         }
+    }
+
+    private void setBluetoothStatusOnUI(String str, int color) {
+        mBluetoothStatus.setText(str);
+        mBluetoothStatus.setTextColor(getResources().getColor(color));
     }
 
 
@@ -111,5 +121,15 @@ public class HomeFragment2 extends Fragment {
         sharedPrefHelper.setString(Constants.SELECTED_PROFILE_KEY, item.getTitle().toString());
         mSelectedProfile.setText(item.getTitle());
         return true;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            bluetoothDataCommunicationlistener = (IBluetoothDataCommunication) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement IBluetoothDataCommunication");
+        }
     }
 }
