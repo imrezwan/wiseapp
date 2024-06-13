@@ -144,6 +144,7 @@
                         android:src="@drawable/water_icon" />
 
                     <TextView
+                        android:id="@+id/tv_initial_water"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="250ml"
@@ -198,6 +199,7 @@
                         android:src="@drawable/tds_icon" />
 
                     <TextView
+                        android:id="@+id/tv_initial_tds"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="150ppm"
@@ -261,6 +263,7 @@
                         android:src="@drawable/temperature_icon" />
 
                     <TextView
+                        android:id="@+id/tv_initial_temp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="92c"
@@ -286,21 +289,20 @@
             android:layout_weight="1">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:background="@color/colorGreen"
                 android:orientation="horizontal">
-                <ImageView
-                    android:layout_width="20sp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="7dp"
-                    android:src="@drawable/check_circle_white" />
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_machine_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:text="@string/ready"
+                    android:padding="5sp"
                     android:textStyle="bold"
+                    android:background="@color/colorGreen"
+                    android:layout_gravity="center"
+                    android:gravity="center"
                     android:textSize="@dimen/labelTextSize"
                     android:textColor="@color/colorWhite"></TextView>
             </LinearLayout>

@@ -28,7 +28,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.imrezwan.wise_brewer.enums.Connection;
 import com.imrezwan.wise_brewer.interfaces.IBluetoothConnector;
-import com.imrezwan.wise_brewer.interfaces.IBluetoothDataCommunication;
+import com.imrezwan.wise_brewer.interfaces.IBluetoothFragmentDataDispatcher;
 import com.imrezwan.wise_brewer.models.ProfileData;
 import com.imrezwan.wise_brewer.utils.Constants;
 import com.imrezwan.wise_brewer.utils.FragmentHandler;
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements
         IProfileSender, ServiceConnection, SerialListener,
         FragmentManager.OnBackStackChangedListener,
         IBluetoothConnector,
-        IBluetoothDataCommunication
+        IBluetoothFragmentDataDispatcher
 {
     ProfileCreationViewModel profileCreationViewModel;
     Toolbar toolbar;
@@ -63,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements
     private boolean initialStart = true;
     private boolean isActivityResumed = false;
 
+    private HomeFragment2 homeFragment = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,9 +73,9 @@ public class MainActivity extends AppCompatActivity implements
         setupToolbar();
         setupBottomNavigationBar();
         getSupportFragmentManager().addOnBackStackChangedListener(this);
-        if (savedInstanceState == null)
-            FragmentHandler.replaceFragment(this, HomeFragment2.newInstance(), "home");
-        else
+        if (savedInstanceState == null) {
+            FragmentHandler.replaceFragment(this, getHomeFragment(), "home");
+        }else
             onBackStackChanged();
     }
 
@@ -81,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements
         bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.nav_home:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new HomeFragment2(), "home").addToBackStack(null).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment, getHomeFragment(), "home").addToBackStack(null).commit();
                     return true;
                 case R.id.nav_profiles:
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new ProfilesFragment(), "profiles").addToBackStack(null).commit();
@@ -90,6 +92,14 @@ public class MainActivity extends AppCompatActivity implements
             return false;
         });
 
+    }
+
+    private HomeFragment2 getHomeFragment() {
+        if (homeFragment != null) {
+            return homeFragment;
+        }
+        homeFragment = HomeFragment2.newInstance();
+        return homeFragment;
     }
 
     private void setupToolbar() {
@@ -375,35 +385,41 @@ public class MainActivity extends AppCompatActivity implements
         }
         receiveText = spn.toString();
         String newString = receiveText.substring(0, receiveText.length() - 1);
-        Log.d("COFFEE_TAG", receiveText);
-        Log.d("COFFEE_TAG_Length",Integer.toString(newString.length()));
-        String[] coffeeDataArr = receiveText.split(",");
+        Log.d(Constants.LOGGER_TAG, "Receieved Text: " + receiveText);
+        Log.d(Constants.LOGGER_TAG, "Text Length: " + newString.length());
+        String[] coffeeDataArr = receiveText.split(" ");
 
-//        Toast.makeText(getActivity(), "Received: " + receiveText, Toast.LENGTH_SHORT).show();
-        if(newString.equals("OK")||receiveText.equalsIgnoreCase("OK") /*&& !isCounting*/) {
-            //startCountDownTimer(); // disable
-            Toast.makeText(this, "STARTED", Toast.LENGTH_SHORT).show();
-            MediaPlayer mPlayer = MediaPlayer.create(this, R.raw.beep_start);
-            mPlayer.start();
+        if(Integer.parseInt(coffeeDataArr[0]) == Constants.INITIAL_SCREEN_DATA) {
+            homeFragment.dispatchDataFromMainActivityToFragment(newString);
         }
-        else if(newString.equals("DONE") || receiveText.equals("DONE")) {
-            Toast.makeText(this, "YOUR COFFEE IS READY", Toast.LENGTH_LONG ).show();
-            MediaPlayer mPlayer = MediaPlayer.create(this, R.raw.beep);
-            mPlayer.start();
-//            updateStartButton(true);
-//            tvStart.setText("START");
-//            tvStart.setTextColor(getResources().getColor(android.R.color.black));
-//            tvStart.setTextColor(getResources().getColor(android.R.color.black));
-        }
-        else if(coffeeDataArr.length == 5) {
-            long currentTime = System.currentTimeMillis();
-//            Log.d("COFFEE_TAG", lastCallTime + " => " + currentTime);
-            if( (currentTime - lastCallTime) > 100) {
-                //Log.d("COFFEE_TAG", "INSIDE ====>>>>>>>>>>>");
-//                setupCoffeeDataOnScreen(coffeeDataArr);
-            }
-            lastCallTime = currentTime;
-        }
+
+
+//
+////        Toast.makeText(getActivity(), "Received: " + receiveText, Toast.LENGTH_SHORT).show();
+//        if(newString.equals("OK")||receiveText.equalsIgnoreCase("OK") /*&& !isCounting*/) {
+//            //startCountDownTimer(); // disable
+//            Toast.makeText(this, "STARTED", Toast.LENGTH_SHORT).show();
+//            MediaPlayer mPlayer = MediaPlayer.create(this, R.raw.beep_start);
+//            mPlayer.start();
+//        }
+//        else if(newString.equals("DONE") || receiveText.equals("DONE")) {
+//            Toast.makeText(this, "YOUR COFFEE IS READY", Toast.LENGTH_LONG ).show();
+//            MediaPlayer mPlayer = MediaPlayer.create(this, R.raw.beep);
+//            mPlayer.start();
+////            updateStartButton(true);
+////            tvStart.setText("START");
+////            tvStart.setTextColor(getResources().getColor(android.R.color.black));
+////            tvStart.setTextColor(getResources().getColor(android.R.color.black));
+//        }
+//        else if(coffeeDataArr.length == 5) {
+//            long currentTime = System.currentTimeMillis();
+////            Log.d("COFFEE_TAG", lastCallTime + " => " + currentTime);
+//            if( (currentTime - lastCallTime) > 100) {
+//                //Log.d("COFFEE_TAG", "INSIDE ====>>>>>>>>>>>");
+////                setupCoffeeDataOnScreen(coffeeDataArr);
+//            }
+//            lastCallTime = currentTime;
+//        }
     }
 
     @Override
@@ -421,7 +437,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onDataSend(String data) {
+    public void dispatchDataFromFragmentToMainActivity(String data) {
         send(data);
     }
 }
